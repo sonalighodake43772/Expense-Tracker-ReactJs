@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 const Expenses=()=>
 {
     const [SpendMoney,setSpendMoney]=useState("");
@@ -19,7 +19,7 @@ const Expenses=()=>
     {
         setDescription(e.target.value);
     }
-const submitHandler=(e)=>
+const submitHandler=async(e)=>
 {
     e.preventDefault();
     setExpense([
@@ -29,11 +29,72 @@ const submitHandler=(e)=>
             Description:Description,
             Category:Category
         }
-    ])
+    ]);
+    const post =await fetch(
+        "https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses.json",
+        {
+            method:"POST",
+            body:JSON.stringify({
+                SpendMoney:SpendMoney,
+                Description:Description,
+                Category:Category,
+
+
+            }),
+            headers:
+            {
+                "Content-Type":"application/json"
+            }
+        }
+    )
+   
+
+    const res=await post.json();
+    console.log(res);
     setSpendMoney("");
     setDescription("");
     setCategory("");
 }
+useEffect(()=>
+{
+    const getrealtimedata=async()=>
+    {
+        const get =await fetch(
+            "https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses.json",
+            {
+                method:"GET",
+                
+                headers:
+                {
+                    "Content-Type":"application/json"
+                },
+            }
+        );
+        const res=await get.json();
+        console.log(res);
+        if(get.ok)
+        {
+            const getexpense=Object.keys(res).map((exp)=>
+            {
+                return{
+                    id:exp,
+                    SpendMoney:res[exp].SpendMoney,
+                    Description:res[exp].Description,
+                    Category:res[exp].Category
+                }
+
+            });
+            setExpense(getexpense);
+        }
+        else
+        {
+            alert(res.error.message);
+        }
+    };
+        getrealtimedata();
+    
+},[]);
+ 
     return(
         <Fragment>
         <form onSubmit={submitHandler}>
