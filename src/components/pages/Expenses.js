@@ -1,10 +1,13 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState,useContext } from "react";
+import ExpenseContext from "../store/Expense-context";
 const Expenses=()=>
 {
     const [SpendMoney,setSpendMoney]=useState("");
     const [Description,setDescription]=useState("");
     const [Category,setCategory]=useState("");
-    const [expense,setExpense]=useState([]);
+    // const [expense,setExpense]=useState([]);
+
+    const expCtx=useContext(ExpenseContext);
 
     const MoneyHandler=(e)=>
     {
@@ -22,78 +25,28 @@ const Expenses=()=>
 const submitHandler=async(e)=>
 {
     e.preventDefault();
-    setExpense([
-        ...expense,
-        {
-            SpendMoney:SpendMoney,
-            Description:Description,
-            Category:Category
-        }
-    ]);
-    const post =await fetch(
-        "https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses.json",
-        {
-            method:"POST",
-            body:JSON.stringify({
-                SpendMoney:SpendMoney,
-                Description:Description,
-                Category:Category,
+   const exp={
+    SpendMoney:   SpendMoney,
+    Description:Description,
+    Category:Category
 
-
-            }),
-            headers:
-            {
-                "Content-Type":"application/json"
-            }
-        }
-    )
-   
-
-    const res=await post.json();
-    console.log(res);
-    setSpendMoney("");
-    setDescription("");
-    setCategory("");
-}
-useEffect(()=>
-{
-    const getrealtimedata=async()=>
-    {
-        const get =await fetch(
-            "https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses.json",
-            {
-                method:"GET",
-                
-                headers:
-                {
-                    "Content-Type":"application/json"
-                },
-            }
-        );
-        const res=await get.json();
-        console.log(res);
-        if(get.ok)
-        {
-            const getexpense=Object.keys(res).map((exp)=>
-            {
-                return{
-                    id:exp,
-                    SpendMoney:res[exp].SpendMoney,
-                    Description:res[exp].Description,
-                    Category:res[exp].Category
-                }
-
-            });
-            setExpense(getexpense);
-        }
-        else
-        {
-            alert(res.error.message);
-        }
-    };
-        getrealtimedata();
+   }
     
-},[]);
+   expCtx.postExpense(exp);
+           
+}
+const deleteHandler=(expID)=>{
+    expCtx.deleteExpense(expID);
+
+}
+const editHandler=(exp)=>{
+    setSpendMoney(exp.SpendMoney);
+    setDescription(exp.Description);
+    setCategory(exp.Category);
+
+    expCtx.editExpense(exp);
+    console.log(exp);
+}
  
     return(
         <Fragment>
@@ -126,11 +79,14 @@ useEffect(()=>
             <button type="submit">submit</button>
         </form>
         <ul>
-            {expense.map((exp)=>(
+            {expCtx.expenses.map((exp)=>(
                <li key={exp.SpendMoney+exp.Description}>
                 SpendMoney:{exp.SpendMoney},
                Description;{exp.Description},
                Category:{exp.Category}
+             
+            <button onClick={editHandler.bind(null, exp)}>edit</button>
+            <button onClick={deleteHandler.bind(null, exp.id)}>delete</button>
 
                </li> 
 
