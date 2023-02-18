@@ -33,8 +33,8 @@ const ExpenseForm = () => {
         //setIsLoading(true)
 
     if (
-      password.length >= 8 &&
-      confirmPassword.length >= 8 &&
+      password.length >= 6 &&
+      confirmPassword.length >= 6 &&
       password === confirmPassword
     ) {
       let url;
@@ -88,7 +88,7 @@ const ExpenseForm = () => {
         alert("password and confirm password did not match")
       }
       else if(password.length<=8 && confirmPassword.length<=8){
-        alert('please enter atleast 8 digit')
+        alert('please enter atleast 6 digit')
       }
     }
     setEmail("");
