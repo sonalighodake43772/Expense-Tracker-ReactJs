@@ -97,6 +97,10 @@ const ExpenseForm = () => {
     setConfirmPassword("");
 
   };
+  const forgetpass=()=>
+  {
+    history.replace("./ForgotPassword")
+  }
 
   const switchAuthHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -132,8 +136,10 @@ const ExpenseForm = () => {
             required
           />
         </div>
+        
         <div>
         <button type="submit">{isLogin ? "login" : "Sign up"}</button><br/>
+        <button onClick={forgetpass}>ForgotPassword</button>
         {/* {isLoading && <p>sending request...</p>} */}
         <h4 type="button" onClick={switchAuthHandler}>
           {isLogin
@@ -141,6 +147,7 @@ const ExpenseForm = () => {
             : "already have an account? login"}
         </h4>
         </div>
+       
       </form>
     </section>
   );
