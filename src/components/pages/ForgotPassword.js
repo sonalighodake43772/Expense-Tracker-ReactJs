@@ -16,7 +16,7 @@ const passwrdHandler=async(e)=>
     e.preventDefault();
     setIsLoading(true);
     const ResetPass=await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCgUOqeNyJVmp0BGn8K4bpRLeN4pcRNwPk",
+        "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key= AIzaSyCImM5P9ds-51beVmCJrgAHSBBx72a8pBg ",
         {
             method:"POST",
             body:JSON.stringify({
