@@ -1,16 +1,20 @@
 import { useState, } from "react";
 import { useHistory } from "react-router-dom";
-import { useContext } from "react";
-import ExpenseContext from "../store/Expense-context";
+// import { useContext } from "react";
+// import ExpenseContext from "../store/Expense-context";
+import { authActions } from "../store/auth-slice";
+import { useDispatch } from "react-redux";
+import classes from './ExpenseForm.module.css'
 
 const ExpenseForm = () => {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true)
+ const [isLogin, setIsLogin] = useState(true)
 
-  const expCtx=useContext(ExpenseContext)
+  // const expCtx=useContext(ExpenseContext)
+  const dispatch=useDispatch();
   //const [isLoading,setIsLoading]=useState(false)
    
   const history=useHistory()
@@ -76,10 +80,11 @@ const ExpenseForm = () => {
           console.log(data.idToken);
           const regex = /[.@]/g;                          
           const emailId = data.email.replace(regex, "")
-          expCtx.login(data.idToken,emailId)
-          // history.replace('/DummyScreen')
-          // history.replace('/EmailVerification')
-          history.replace("/Expenses");
+          // expCtx.login(data.idToken,emailId)
+          dispatch(authActions.login({emailId:emailId,token:data.idToken}));
+          //  history.replace('/DummyScreen')
+          //  history.replace('/EmailVerification')
+           history.replace("/Expenses");
           }
         })
         .catch((err) => {
@@ -108,11 +113,11 @@ const ExpenseForm = () => {
   };
 
   return (
-    <section>
+    <section className={classes.auth}>
       <form onSubmit={submitHandler}>
-          <h1>{isLogin ? "login" : "sign up"}</h1>
-        <div>
-          <input
+          <h1>{isLogin ? "Login" : "sign up"}</h1>
+        <div className={classes.control}>
+         <input
             type="email"
             id="email"
             placeholder="Email"
@@ -120,7 +125,8 @@ const ExpenseForm = () => {
             value={email}
             required
           />
-          <input
+          
+          <input 
             type="text"
             id="password"
             placeholder="Password"
@@ -128,7 +134,8 @@ const ExpenseForm = () => {
             value={password}
             required
           />
-          <input
+           
+         <input
             type="password"
             id="Confirm password"
             placeholder="Confirm Password"
@@ -139,8 +146,8 @@ const ExpenseForm = () => {
         </div>
         
         <div>
-        <button type="submit">{isLogin ? "login" : "Sign up"}</button><br/>
-        <button onClick={forgetpass}>ForgotPassword</button>
+        <button className={classes.button} type="submit">{isLogin ? "Login" : "Sign up"}</button><br/>
+        <button className={classes.button} onClick={forgetpass}>ForgotPassword</button>
         {/* {isLoading && <p>sending request...</p>} */}
         <h4 type="button" onClick={switchAuthHandler}>
           {isLogin

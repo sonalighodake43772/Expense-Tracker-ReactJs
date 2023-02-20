@@ -1,0 +1,47 @@
+.expense {
+    margin: 5rem auto;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+    width: 35rem;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    background-color: #f4f0fa;
+    text-decoration: none;
+  }
+  
+  .control {
+    margin-bottom: 0.5rem;
+  }
+  
+  .control label {
+    display: block;
+    color: #616161;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  
+  .control input {
+    display: block;
+    width: 20rem;
+    margin: auto;
+    border-radius: 4px;
+    padding: 0.25rem;
+    border: 1px solid #ccc;
+  }
+  .control button{
+    width: 119px;
+    margin-top: 20px;
+    background-color: blueviolet;
+    color: white;
+    height: 40px;
+border: 2px solid black;
+  }
+.button
+{
+    background-color: blueviolet;
+    margin-left: 16px;
+    height: 26px;
+    width: 53px;
+    color:white
+
+  }

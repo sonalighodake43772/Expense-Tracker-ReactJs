@@ -1,42 +1,24 @@
 import React, { useEffect, useState } from "react";
 
-const ExpenseContext = React.createContext({
-  token: null,
-  email: null,
-  isLoggedIn: false,
-  login: (token,email) => {},
-  logout:(token,email)=>{},
+import { useDispatch } from "react-redux";
+import { expenseActions } from "./Expense-slice";
 
+const ExpenseContext = React.createContext({
   postExpense:()=>{},
   getExpense:()=>{},
   editExpense:(exp)=>{},
   deleteExpense:(id)=>{},
-expenses:null
+
 });
 
 export const ExpenseContextProvider = (props) => {
-  const userEmail = localStorage.getItem("email");
-  const [email, setEmail] = useState(userEmail);
+  
+  const dispatch =useDispatch();
+ 
 
-  const intitialToken = localStorage.getItem("token");
-  const [token, setToken] = useState(intitialToken);
-  const[expenses,setExpense]=useState([]);
+ 
 
-  const userIsLoggedIn = !!token;
-
-  const loginHandler = (token, email) => {
-    setToken(token);
-    setEmail(email);
-    localStorage.setItem("token", token);
-    localStorage.setItem("email", email);
-  };
-  const logoutHandler = (token, email) => {
-    setToken(null);
-    setEmail(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-  };
-
+ 
   const postExpenseHandler=(exp)=>{
     const postExpenses=async(exp)=>{
       const post=await fetch(
@@ -64,6 +46,7 @@ export const ExpenseContextProvider = (props) => {
      postExpenses(exp);
   }
   let newExpense=[];
+
   const getExpenseHandler=()=>{
     const getrealtimeExpenses=async()=>
     {
@@ -93,7 +76,12 @@ export const ExpenseContextProvider = (props) => {
 
         })
       }
-        setExpense(newExpense);
+      const totalSpent=newExpense.reduce((currNumber,exp)=>{
+        return currNumber+Number(exp.SpendMoney)
+      },0)
+      dispatch(expenseActions.addExpense({
+        newExpense:newExpense,
+      totalSpent:totalSpent}))
 
       } catch(err){
       alert(err.message);
@@ -141,17 +129,13 @@ getExpenseHandler();
   }
 
 const expensecontextVal = {
-  token: token,
-  email: email,
-  isLoggedIn: userIsLoggedIn,
-  login: loginHandler,
-  logout:logoutHandler,
+  
 
   postExpense:postExpenseHandler,
   getExpense:getExpenseHandler,
   deleteExpense:deleteexpHandler,
   editExpense:editexpenses,
-  expenses:expenses
+
 
 };
 

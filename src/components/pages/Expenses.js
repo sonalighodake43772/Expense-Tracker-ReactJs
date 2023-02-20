@@ -1,11 +1,20 @@
-import React, { Fragment, useEffect, useState,useContext } from "react";
+import React, {  useState,useContext } from "react";
 import ExpenseContext from "../store/Expense-context";
+
+import { useSelector } from "react-redux";
+
+import classes from "./Expenses.module.css";
+
+
 const Expenses=()=>
 {
+    const expense=useSelector((state)=>state.expense.expense)
     const [SpendMoney,setSpendMoney]=useState("");
     const [Description,setDescription]=useState("");
     const [Category,setCategory]=useState("");
     // const [expense,setExpense]=useState([]);
+    
+    
 
     const expCtx=useContext(ExpenseContext);
 
@@ -47,11 +56,16 @@ const editHandler=(exp)=>{
     expCtx.editExpense(exp);
     console.log(exp);
 }
+
  
     return(
-        <Fragment>
+        <main className={classes.expense}>
+        <section >
+    
+           
         <form onSubmit={submitHandler}>
             <h2>Daily Expenses</h2>
+            <div className={classes.control}>
             <input
             type="number"
             id="number"
@@ -76,17 +90,19 @@ const editHandler=(exp)=>{
                 <option value="food">Food</option>
 
             </select>
-            <button type="submit">submit</button>
+            <br/>
+            <button type="submit">SUBMIT</button>
+            </div>
         </form>
-        <ul>
-            {expCtx.expenses.map((exp)=>(
-               <li key={exp.SpendMoney+exp.Description}>
-                SpendMoney:{exp.SpendMoney},
-               Description;{exp.Description},
+        <ul >
+            {expense.map((exp)=>(
+               <li  key={exp.SpendMoney+exp.Description}>
+                SpendMoney:{exp.SpendMoney}-
+               Description:{exp.Description}-
                Category:{exp.Category}
              
-            <button onClick={editHandler.bind(null, exp)}>edit</button>
-            <button onClick={deleteHandler.bind(null, exp.id)}>delete</button>
+            <button className={classes.button} onClick={editHandler.bind(null, exp)}>EDIT</button>
+            <button className={classes.button} onClick={deleteHandler.bind(null, exp.id)}>DELETE</button>
 
                </li> 
 
@@ -95,7 +111,9 @@ const editHandler=(exp)=>{
                 
             }
         </ul>
-        </Fragment>
+       
+        </section>
+        </main>
     )
 
 }

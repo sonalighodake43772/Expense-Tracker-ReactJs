@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Fragment } from "react";
 import ExpenseContext from "../store/Expense-context";
 import { useContext } from "react";
-import { useHistory } from "react-router-dom";
+
+
 
 const CompleteProfile = () => {
   const expCtx = useContext(ExpenseContext);
   const idToken = expCtx.token;
- const email=expCtx.email;
- const history=useHistory();
+
   const [name, setName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
@@ -78,20 +78,11 @@ const CompleteProfile = () => {
 }
 getdata();
 },[]);
-const logout=()=>
-{
-expCtx.logout(email,idToken);
-history.replace("./");
-}
+
   return (
     <Fragment>
-      {/* <div>
-
-        <p>Winners never quite,quitters never won</p>
-      </div> */}
-      <div>
-        <button onClick={logout}>logout</button>
-      </div>
+    
+     
 
       <form onSubmit={formSubmitHandler}>
         <h4>Contact Details</h4>
