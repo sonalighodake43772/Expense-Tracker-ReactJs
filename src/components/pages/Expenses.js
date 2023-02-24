@@ -1,4 +1,4 @@
-import React, {  useState,useContext } from "react";
+import React, {  useState,useContext, Fragment } from "react";
 import ExpenseContext from "../store/Expense-context";
 
 import { useSelector } from "react-redux";
@@ -61,9 +61,9 @@ const editHandler=(exp)=>{
 
  
     return(
-        <main className={classes.expense}>
-        <section >
-    
+        //   <main className={classes.expense}>
+        //   <section > 
+    <Fragment>
            
         <form onSubmit={submitHandler}>
             <h2>Daily Expenses</h2>
@@ -114,8 +114,9 @@ const editHandler=(exp)=>{
             }
         </ul>
        
-        </section>
-        </main>
+         {/* </section> */}
+         {/* </main> */}
+        </Fragment>
     )
 
 }

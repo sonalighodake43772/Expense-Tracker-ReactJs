@@ -103,9 +103,10 @@ const ExpenseForm = () => {
   };
 
   return (
-    <main className={classes.auth}>
-      <section>
+    // <main className={classes.auth}>
+    //   <section>
         <form onSubmit={submitHandler}>
+          <h2>expense Tracker</h2>
           <h1>{isLogin ? "Login" : "Sign up"}</h1>
           <div className={classes.control}>
             <input
@@ -147,8 +148,8 @@ const ExpenseForm = () => {
             </h4>
           </div>
         </form>
-      </section>
-    </main>
+    //   </section>
+    // </main>
   );
 };
 
