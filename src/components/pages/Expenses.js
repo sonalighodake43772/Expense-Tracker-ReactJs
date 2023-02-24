@@ -37,7 +37,9 @@ const submitHandler=async(e)=>
    const exp={
     SpendMoney:   SpendMoney,
     Description:Description,
-    Category:Category
+    Category:Category,
+    
+
 
    }
     

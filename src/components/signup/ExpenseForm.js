@@ -117,7 +117,7 @@ const ExpenseForm = () => {
               required
             />
             <input
-              type="text"
+              type="password"
               id="password"
               placeholder="Password"
               onChange={passwordHandler}
