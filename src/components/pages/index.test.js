@@ -8,6 +8,7 @@ import Header from "../Header";
 import { Provider } from 'react-redux';
 import store from "../store/store";
 import Expenses from './Expenses';
+import userEvent from '@testing-library/user-event';
 
 const render =component=>rtlRender(
     <Provider store={store}>
@@ -67,6 +68,31 @@ describe('dummyscreen component', () => {
       const passElement = screen.getByText('entered email with which you have registered?');
       expect(passElement).toBeInTheDocument();
     });
+    test('renders isloading is false ', () => {
+      // Arrange
+      render(<ForgotPassword />);
+  
+      // Act
+      const buttonElement = screen.getByRole('button');
+      userEvent.click(buttonElement)
+  
+      // Assert
+      const outputElement = screen.getByText('send link');
+      expect(outputElement).toBeInTheDocument();
+    });
+    test('does not render "sending request" if the button was clicked', () => {
+      // Arrange
+      render(<ForgotPassword />);
+ 
+      // Act
+      const buttonElement = screen.getByRole('button');
+      userEvent.click(buttonElement)
+  
+      // Assert
+      const outputsElement = screen.queryByText('Sending request...', { exact: false });
+      
+      expect(outputsElement).toBeNull();
+    });
   });
   describe('Header component', () => {
     test('renders Header as a text', () => {
@@ -107,3 +133,7 @@ describe('dummyscreen component', () => {
       expect(expElement).toBeInTheDocument();
     });
   });
+
+
+
+  
