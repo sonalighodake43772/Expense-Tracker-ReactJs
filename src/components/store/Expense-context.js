@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { expenseActions } from "./Expense-slice";
 
 const ExpenseContext = React.createContext({
@@ -12,6 +12,7 @@ const ExpenseContext = React.createContext({
 });
 
 export const ExpenseContextProvider = (props) => {
+  const userEmail=useSelector((state)=>state.auth.email);
   
   const dispatch =useDispatch();
  
@@ -22,14 +23,15 @@ export const ExpenseContextProvider = (props) => {
   const postExpenseHandler=(exp)=>{
     const postExpenses=async(exp)=>{
       const post=await fetch(
-       "https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses.json",
+       `https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses/${userEmail}.json`,
        {
 
         method:"POST",
         body:JSON.stringify({
           SpendMoney:exp.SpendMoney,
           Description:exp.Description,
-          Category:exp.Category
+          Category:exp.Category,
+       
 
         }),
         headers:
@@ -45,14 +47,14 @@ export const ExpenseContextProvider = (props) => {
     }
      postExpenses(exp);
   }
-  let newExpense=[];
-
+ 
+ 
   const getExpenseHandler=()=>{
     const getrealtimeExpenses=async()=>
     {
       try{
       const get=await fetch( 
-        "https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses.json",
+        `https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses/${userEmail}.json`,
 
         {
           method:"GET",
@@ -63,15 +65,17 @@ export const ExpenseContextProvider = (props) => {
         }
       );
       const res=await get.json();
-      console.log(res);
-      if(!res.ok)
+      console.log("getdaata",res);
+      let newExpense=[];
+      if(!!res)
       {
         newExpense=Object.keys(res).map((exp)=>{
           return{
           id:exp,
           SpendMoney:res[exp].SpendMoney,
           Description:res[exp].Description,
-        Category:res[exp].Category
+        Category:res[exp].Category,
+        
           }
 
         })
@@ -84,7 +88,7 @@ export const ExpenseContextProvider = (props) => {
       totalSpent:totalSpent}))
 
       } catch(err){
-      alert(err.message);
+      // alert(err.message);
     }
   };
 getrealtimeExpenses();
@@ -92,7 +96,7 @@ getrealtimeExpenses();
 
   useEffect(()=>{
 getExpenseHandler();
-  },[]);
+  },[getExpenseHandler]);
   const deleteexpHandler=(id)=>
 
  {
@@ -101,7 +105,7 @@ getExpenseHandler();
   
     
       const del=await fetch(
-        `https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses/${id}.json`,
+        `https://expenses-bfa4a-default-rtdb.firebaseio.com/Expenses/${userEmail}/${id}.json`,
         {
           method:"DELETE",
           headers:
@@ -113,7 +117,7 @@ getExpenseHandler();
       )
       const res=await del.json();
       getExpenseHandler();
-      console.log(res);
+       console.log(res);
     
   }catch(err){
     alert(err.message);
@@ -123,6 +127,7 @@ getExpenseHandler();
     deleteExpenses(id);
     
   }
+ 
   const editexpenses=(exp)=>
   {
     deleteexpHandler(exp.id);
